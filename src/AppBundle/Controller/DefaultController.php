@@ -15,11 +15,10 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $conn = $this->getDoctrine()->getConnection();
-        if (!Selectors::exists($conn, "
-            show tables;
-        ")) {
-            return null;
-        }
+
+        Selectors::execute($conn, "
+            CREATE TABLE users(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(30));
+        ");
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
