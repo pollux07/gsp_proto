@@ -1,0 +1,41 @@
+UsersBundle\Entity\Users:
+    type: entity
+    table: null
+    repositoryClass: UsersBundle\Repository\UsersRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: '30'
+        apPat:
+            type: string
+            length: '30'
+            column: ap_pat
+        apMat:
+            type: string
+            length: '30'
+            column: ap_mat
+        nombreUsuario:
+            type: string
+            length: '50'
+            unique: true
+            column: nombre_usuario
+        email:
+            type: string
+            length: '65'
+            unique: true
+        password:
+            type: string
+            length: '60'
+        telefono:
+            type: integer
+            nullable: true
+        celular:
+            type: integer
+            nullable: true
+    lifecycleCallbacks: {  }

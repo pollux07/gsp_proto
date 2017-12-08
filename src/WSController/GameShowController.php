@@ -28,23 +28,36 @@ class GameShowController extends Controller {
         $email = $request->get("email");
         $psw = $request->get("psw");
 
-        $cost = ['cost' =>12,];
-
-        $encriptedPsw = password_hash($psw, PASSWORD_BCRYPT, $cost)."\n";
+        $encriptedPsw = sha1($psw);
         /**************************
          * BEGIN TRANSACTION
          **************************/
         $conn->beginTransaction();
 
         Selectors::execute($conn, "
-            INSERT INTO users (username, email, password, disabled)
-            VALUES ('$username', '$email', '$encriptedPsw', 0)
+            INSERT INTO users (nombre_usuario, email, password) 
+            VALUES ('$username', '$email', '$encriptedPsw')
         ");
 
         /**************************
          * COMMIT
          **************************/
         $conn->commit();
+
+        return new JsonResponse(array(
+            "code" =>self::RESPONSE_OK,
+        ));
+    }
+
+    public function loginAction(Request $request) {
+        $conn = $this->getDoctrine()->getConnection();
+        $email = $request->get("email");
+        $pwd = $request->get("pwd");
+        $encriptedPass = sha1($pwd);
+
+        $userId = Selectors::selectSingleRecordOrNull($conn, "
+            
+        ");
 
         return new JsonResponse(array(
             "code" =>self::RESPONSE_OK,
