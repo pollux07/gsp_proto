@@ -114,4 +114,67 @@ class GameShowController extends Controller {
         ));
     }
 
+    /**
+     * Realiza la actualización de los datos del perfil del usuario.
+     * @Route("/updateUserProfile", name="gs_update_user_profile")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function updateUserProfileAction(Request $request) {
+        $conn = $this->getDoctrine()->getConnection();
+        $userId = $request->get("user_id");
+        $view = $request->get("view");
+
+        /**************************
+         * BEGIN TRANSACTION
+         **************************/
+        $conn->beginTransaction();
+
+        switch ($view) {
+            case 1:
+                $name = $request->get("name");
+                $lastName = $request->get("last_name");
+                $userName = $request->get("username");
+                $phone = $request->get("phone");
+                $cellPhone = $request->get("cellphone");
+
+                Selectors::execute($conn, "
+                UPDATE users SET 
+                  name = '$name',
+                  last_name = '$lastName',
+                  username = '$userName',
+                  phone = $phone,
+                  cellphone = $cellPhone
+                WHERE id = $userId
+                ");
+
+                break;
+            case 2:
+                $email = $request->get("email");
+                $password = $request->get("psw");
+                $password = sha1($password);
+
+                Selectors::execute($conn, "
+                UPDATE users SET
+                  email = '$email',
+                  password = '$password'
+                WHERE id = $userId
+                ");
+                break;
+            default:
+                break;
+        }
+
+        /**************************
+         * COMMIT
+         **************************/
+        $conn->commit();
+
+        return new JsonResponse(array(
+            "code" => self::RESPONSE_OK,
+            "status" => "OK",
+        ));
+    }
+
 }
