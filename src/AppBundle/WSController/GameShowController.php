@@ -110,7 +110,7 @@ class GameShowController extends Controller {
         return new JsonResponse(array(
             "code" => self::RESPONSE_OK,
             "status" => "OK",
-            "name" => $user["nombre"],
+            "name" => $user["name"],
         ));
     }
 
